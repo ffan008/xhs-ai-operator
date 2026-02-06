@@ -6,6 +6,69 @@
 
 ---
 
+## 多模型支持
+
+本系统支持多个图像生成模型，可根据需求灵活选择：
+
+### 可用模型
+
+| 模型 | 特点 | 适用场景 | 成本 |
+|------|------|---------|------|
+| **Stability AI** | 质量高，风格多样 | 通用场景 | 中 |
+| **OpenAI DALL-E** | 理解能力强，质量优秀 | 复杂场景 | 高 |
+| **Replicate** | 模型丰富，性价比高 | 平衡选择 | 低-中 |
+| **Hugging Face** | 开源免费 | 测试开发 | 免费 |
+| **Ideogram** | 擅长文字渲染 | 文字海报 | 免费-付费 |
+| **Leonardo AI** | 风格独特，质量好 | 艺术创作 | 低-中 |
+
+### 模型选择策略
+
+```yaml
+# 成本优先（默认）
+strategy: cost_first
+# 推荐模型顺序: Hugging Face → Replicate → Leonardo → Stability → OpenAI
+
+# 质量优先
+strategy: quality_first
+# 推荐模型顺序: OpenAI → Stability → Ideogram → Replicate → Leonardo
+
+# 速度优先
+strategy: speed_first
+# 推荐模型顺序: Hugging Face → Stability → Replicate → Leonardo → OpenAI
+
+# 平衡模式
+strategy: balanced
+# 综合考虑质量、速度和成本
+```
+
+### 使用方式
+
+**1. 默认策略（成本优先）**
+```
+/xhs 发布 春游穿搭
+# 系统自动选择性价比最高的模型
+```
+
+**2. 指定模型**
+```
+/xhs 发布 春游穿搭 -模型 stability
+# 使用Stability AI生成
+```
+
+**3. 指定策略**
+```
+/xhs 发布 春游穿搭 -策略 quality_first
+# 使用质量最高的模型
+```
+
+**4. 指定子模型**
+```
+/xhs 发布 春游穿搭 -模型 stability -子模型 sdxl
+# 使用Stability AI的SDXL模型
+```
+
+---
+
 ## 基础配置
 
 ### 图像规格

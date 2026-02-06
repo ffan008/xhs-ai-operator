@@ -24,6 +24,7 @@
 - [使用指南](#使用指南)
 - [功能说明](#功能说明)
 - [API 参考](#api-参考)
+- [多模型图像生成](#多模型图像生成)
 - [故障排除](#故障排除)
 - [开发指南](#开发指南)
 - [贡献指南](#贡献指南)
@@ -84,6 +85,31 @@
 - 热门内容分析
 - 风格化配图生成
 - 内容预览和优化
+
+### 🖼️ 多模型图像生成
+
+**NEW!** 现在支持多个图像生成模型：
+
+- **Stability AI** - SD3/SDXL/Turbo
+- **OpenAI DALL-E** - DALL-E 3/2
+- **Replicate** - 多个开源模型
+- **Hugging Face** - 免费开源模型
+- **Ideogram** - 擅长文字渲染
+- **Leonardo AI** - 独特风格
+
+**智能选择策略**：
+- `cost_first` - 成本优先（默认）
+- `quality_first` - 质量优先
+- `speed_first` - 速度优先
+- `balanced` - 平衡模式
+
+**使用示例**：
+```
+/xhs 发布 春季穿搭 -模型 stability
+/xhs 发布 春季穿搭 -策略 quality_first
+```
+
+详见：[多模型配置指南](MULTI_MODEL_GUIDE.md)
 
 ---
 
@@ -206,6 +232,15 @@ npm install -g @tadasant/mcp-server-stability-ai
         "STABILITY_API_KEY": "your-api-key-here"
       }
     },
+    "integration-mcp": {
+      "command": "python3",
+      "args": ["/Users/fans/.refly/mcp-servers/integration-mcp/src/workflow.py"],
+      "env": {
+        "OPENAI_API_KEY": "your-openai-key-here",
+        "REPLICATE_API_TOKEN": "your-replicate-token-here",
+        "HUGGINGFACE_API_KEY": "your-hf-key-here"
+      }
+    },
     "scheduler-mcp": {
       "command": "python3",
       "args": ["/Users/fans/.refly/mcp-servers/scheduler-mcp/src/server.py"]
@@ -267,6 +302,45 @@ npm install -g @tadasant/mcp-server-stability-ai
   "env": {
     "TAVILY_API_KEY": "tvly-your-api-key-here"
   }
+}
+```
+
+### 多模型图像生成配置
+
+系统支持多个图像生成模型，详见 [多模型配置指南](MULTI_MODEL_GUIDE.md)。
+
+**支持的模型**：
+- Stability AI (SD3/SDXL/Turbo)
+- OpenAI DALL-E (3/2)
+- Replicate (SDXL/FLUX/Playground)
+- Hugging Face (免费)
+- Ideogram (擅长文字)
+- Leonardo AI
+
+**快速配置**：
+
+1. 编辑模型配置：
+```bash
+nano ~/.claude/skills/xhs-operator/CONFIG/image_models.json
+```
+
+2. 启用需要的模型（将 `enabled` 设为 `true`）
+
+3. 添加API密钥到 `~/.claude/mcp_config.json`：
+```json
+"integration-mcp": {
+  "env": {
+    "STABILITY_API_KEY": "sk-your-key",
+    "OPENAI_API_KEY": "sk-your-key",
+    "REPLICATE_API_TOKEN": "r8-your-token"
+  }
+}
+```
+
+4. 选择默认策略：
+```json
+{
+  "model_selection_strategy": "cost_first"  // 或 quality_first/speed_first/balanced
 }
 ```
 

@@ -1,0 +1,201 @@
+{
+  "default_model": "stability",
+  "models": {
+    "stability": {
+      "name": "Stability AI",
+      "enabled": true,
+      "provider": "stability-mcp",
+      "api_type": "stability",
+      "models": {
+        "sd3": {
+          "name": "Stable Diffusion 3",
+          "model_id": "sd3",
+          "default_aspect_ratio": "3:4",
+          "supported_ratios": ["1:1", "3:4", "4:3", "16:9", "9:16"],
+          "max_steps": 50,
+          "quality": "high",
+          "description": "最新版本，质量最高，速度较慢"
+        },
+        "sdxl": {
+          "name": "Stable Diffusion XL",
+          "model_id": "sdxl",
+          "default_aspect_ratio": "3:4",
+          "supported_ratios": ["1:1", "3:4", "4:3", "16:9", "9:16"],
+          "max_steps": 40,
+          "quality": "high",
+          "description": "平衡质量和速度"
+        },
+        "sd-turbo": {
+          "name": "SD Turbo",
+          "model_id": "sd-turbo",
+          "default_aspect_ratio": "3:4",
+          "supported_ratios": ["1:1", "3:4", "4:3"],
+          "max_steps": 10,
+          "quality": "medium",
+          "description": "快速生成，适合批量"
+        }
+      },
+      "default_model": "sd3",
+      "api_key_required": true,
+      "api_key_env": "STABILITY_API_KEY",
+      "cost_estimate": {
+        "sd3": "0.04-0.08$/图",
+        "sdxl": "0.02-0.04$/图",
+        "sd-turbo": "0.01-0.02$/图"
+      }
+    },
+    "openai": {
+      "name": "OpenAI DALL-E",
+      "enabled": false,
+      "provider": "openai-mcp",
+      "api_type": "openai",
+      "models": {
+        "dall-e-3": {
+          "name": "DALL-E 3",
+          "model_id": "dall-e-3",
+          "default_aspect_ratio": "1:1",
+          "supported_ratios": ["1:1"],
+          "quality": "standard",
+          "style": "vivid",
+          "description": "OpenAI最新模型，质量优秀"
+        },
+        "dall-e-2": {
+          "name": "DALL-E 2",
+          "model_id": "dall-e-2",
+          "default_aspect_ratio": "1:1",
+          "supported_ratios": ["1:1"],
+          "quality": "standard",
+          "description": "经典版本，速度快"
+        }
+      },
+      "default_model": "dall-e-3",
+      "api_key_required": true,
+      "api_key_env": "OPENAI_API_KEY",
+      "cost_estimate": {
+        "dall-e-3": "0.04-0.12$/图",
+        "dall-e-2": "0.02-0.04$/图"
+      }
+    },
+    "replicate": {
+      "name": "Replicate",
+      "enabled": false,
+      "provider": "replicate-mcp",
+      "api_type": "replicate",
+      "models": {
+        "sdxl": {
+          "name": "SDXL on Replicate",
+          "model_id": "stability-ai/sdxl",
+          "default_aspect_ratio": "3:4",
+          "supported_ratios": ["1:1", "3:4", "4:3", "16:9", "9:16"],
+          "description": "SDXL通过Replicate API"
+        },
+        "flux": {
+          "name": "FLUX.1",
+          "model_id": "black-forest-labs/flux-1.1-pro",
+          "default_aspect_ratio": "3:4",
+          "supported_ratios": ["1:1", "3:4", "4:3", "16:9", "9:16"],
+          "description": "Black Forest Labs最新模型"
+        },
+        "playground": {
+          "name": "Playground v2.5",
+          "model_id": "playgroundai/playground-v2.5-1024px-aesthetic",
+          "default_aspect_ratio": "3:4",
+          "supported_ratios": ["1:1", "3:4", "4:3"],
+          "description": "优秀的审美质量"
+        }
+      },
+      "default_model": "sdxl",
+      "api_key_required": true,
+      "api_key_env": "REPLICATE_API_TOKEN",
+      "cost_estimate": {
+        "sdxl": "0.002-0.01$/图",
+        "flux": "0.03-0.06$/图",
+        "playground": "0.002-0.01$/图"
+      }
+    },
+    "huggingface": {
+      "name": "Hugging Face",
+      "enabled": false,
+      "provider": "huggingface-mcp",
+      "api_type": "huggingface",
+      "models": {
+        "sdxl-turbo": {
+          "name": "SDXL Turbo",
+          "model_id": "stabilityai/sdxl-turbo",
+          "default_aspect_ratio": "3:4",
+          "supported_ratios": ["1:1", "3:4", "4:3"],
+          "description": "开源免费，速度快"
+        },
+        "flux-schnell": {
+          "name": "FLUX.1 Schnell",
+          "model_id": "black-forest-labs/FLUX.1-schnell",
+          "default_aspect_ratio": "3:4",
+          "supported_ratios": ["1:1", "3:4", "4:3"],
+          "description": "开源快速版本"
+        }
+      },
+      "default_model": "sdxl-turbo",
+      "api_key_required": false,
+      "api_key_env": "HUGGINGFACE_API_KEY",
+      "cost_estimate": {
+        "sdxl-turbo": "免费",
+        "flux-schnell": "免费"
+      }
+    },
+    "ideogram": {
+      "name": "Ideogram",
+      "enabled": false,
+      "provider": "ideogram-mcp",
+      "api_type": "ideogram",
+      "models": {
+        "ideogram-v2": {
+          "name": "Ideogram V2",
+          "model_id": "ideogram-v2",
+          "default_aspect_ratio": "3:4",
+          "supported_ratios": ["1:1", "3:4", "4:3", "16:9", "9:16"],
+          "description": "擅长文字渲染"
+        }
+      },
+      "default_model": "ideogram-v2",
+      "api_key_required": true,
+      "api_key_env": "IDEOGRAM_API_KEY",
+      "cost_estimate": {
+        "ideogram-v2": "免费(有限额)/付费"
+      }
+    },
+    "leonardo": {
+      "name": "Leonardo AI",
+      "enabled": false,
+      "provider": "leonardo-mcp",
+      "api_type": "leonardo",
+      "models": {
+        "leonardo-phoenix": {
+          "name": "Leonardo Phoenix",
+          "model_id": "6bef9f1b-29cb-40c7-b9df-32b51c1f67d3",
+          "default_aspect_ratio": "3:4",
+          "supported_ratios": ["1:1", "3:4", "4:3", "16:9", "9:16"],
+          "description": "Leonardo自研模型"
+        },
+        "sd3-leonardo": {
+          "name": "SD3 Leonardo",
+          "model_id": "aa64f7ad-3698-4e2e-8b98-8758d2cb2df9",
+          "default_aspect_ratio": "3:4",
+          "supported_ratios": ["1:1", "3:4", "4:3"],
+          "description": "基于SD3优化"
+        }
+      },
+      "default_model": "leonardo-phoenix",
+      "api_key_required": true,
+      "api_key_env": "LEONARDO_API_KEY",
+      "cost_estimate": {
+        "leonardo-phoenix": "0.01-0.03$/图",
+        "sd3-leonardo": "0.02-0.04$/图"
+      }
+    }
+  },
+  "model_selection_strategy": "cost_first",
+  "fallback_order": ["huggingface", "stability", "replicate", "openai"],
+  "quality_ranking": ["openai", "stability", "ideogram", "replicate", "leonardo", "huggingface"],
+  "cost_ranking": ["huggingface", "replicate", "leonardo", "stability", "openai"],
+  "speed_ranking": ["huggingface", "stability", "replicate", "leonardo", "openai", "ideogram"]
+}

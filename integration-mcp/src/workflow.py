@@ -22,6 +22,9 @@ from mcp.types import (
     EmbeddedResource,
 )
 
+# 导入图像模型管理器
+from image_model_manager import ImageModelManager, ModelStrategy
+
 # 配置日志
 logging.basicConfig(
     level=logging.INFO,
@@ -40,6 +43,7 @@ class IntegrationMCP:
     def __init__(self):
         self.server = Server("integration-mcp")
         self.workflows = {}
+        self.image_model_manager = ImageModelManager()
         self._setup_handlers()
 
         # 加载工作流配置
@@ -197,6 +201,115 @@ class IntegrationMCP:
                         },
                         "required": ["workflow_id"]
                     }
+                ),
+                Tool(
+                    name="list_image_models",
+                    description="List all available image generation models",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "include_disabled": {
+                                "type": "boolean",
+                                "description": "Include disabled models",
+                                "default": False
+                            }
+                        }
+                    }
+                ),
+                Tool(
+                    name="select_image_model",
+                    description="Select an image generation model based on strategy",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "strategy": {
+                                "type": "string",
+                                "description": "Selection strategy",
+                                "enum": ["cost_first", "quality_first", "speed_first", "balanced"],
+                                "default": "cost_first"
+                            },
+                            "preferred_model": {
+                                "type": "string",
+                                "description": "Preferred model ID (optional)"
+                            },
+                            "aspect_ratio": {
+                                "type": "string",
+                                "description": "Desired aspect ratio",
+                                "default": "3:4"
+                            }
+                        }
+                    }
+                ),
+                Tool(
+                    name="get_model_config",
+                    description="Get configuration for a specific model",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "model_id": {
+                                "type": "string",
+                                "description": "Model ID"
+                            }
+                        },
+                        "required": ["model_id"]
+                    }
+                ),
+                Tool(
+                    name="enable_image_model",
+                    description="Enable an image generation model",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "model_id": {
+                                "type": "string",
+                                "description": "Model ID to enable"
+                            }
+                        },
+                        "required": ["model_id"]
+                    }
+                ),
+                Tool(
+                    name="disable_image_model",
+                    description="Disable an image generation model",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "model_id": {
+                                "type": "string",
+                                "description": "Model ID to disable"
+                            }
+                        },
+                        "required": ["model_id"]
+                    }
+                ),
+                Tool(
+                    name="generate_image_with_model",
+                    description="Generate image using specified model",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "prompt": {
+                                "type": "string",
+                                "description": "Image generation prompt"
+                            },
+                            "model_id": {
+                                "type": "string",
+                                "description": "Model to use (optional, will select based on strategy if not specified)"
+                            },
+                            "aspect_ratio": {
+                                "type": "string",
+                                "description": "Image aspect ratio",
+                                "default": "3:4"
+                            },
+                            "strategy": {
+                                "type": "string",
+                                "description": "Model selection strategy (if model_id not specified)",
+                                "enum": ["cost_first", "quality_first", "speed_first", "balanced"],
+                                "default": "cost_first"
+                            }
+                        },
+                        "required": ["prompt"]
+                    }
                 )
             ]
 
@@ -220,6 +333,27 @@ class IntegrationMCP:
                     result = await self._list_workflows(arguments.get("type", "all"))
                 elif name == "get_workflow_status":
                     result = await self._get_workflow_status(arguments.get("workflow_id"))
+                elif name == "list_image_models":
+                    result = await self._list_image_models(arguments.get("include_disabled", False))
+                elif name == "select_image_model":
+                    result = await self._select_image_model(
+                        arguments.get("strategy"),
+                        arguments.get("preferred_model"),
+                        arguments.get("aspect_ratio", "3:4")
+                    )
+                elif name == "get_model_config":
+                    result = await self._get_model_config(arguments.get("model_id"))
+                elif name == "enable_image_model":
+                    result = await self._enable_image_model(arguments.get("model_id"))
+                elif name == "disable_image_model":
+                    result = await self._disable_image_model(arguments.get("model_id"))
+                elif name == "generate_image_with_model":
+                    result = await self._generate_image_with_model(
+                        arguments.get("prompt"),
+                        arguments.get("model_id"),
+                        arguments.get("aspect_ratio", "3:4"),
+                        arguments.get("strategy", "cost_first")
+                    )
                 else:
                     result = {"error": f"Unknown tool: {name}"}
 
@@ -616,6 +750,140 @@ class IntegrationMCP:
                 "success": False,
                 "error": f"Workflow {workflow_id} not found"
             }
+
+    async def _list_image_models(self, include_disabled: bool = False) -> Dict[str, Any]:
+        """列出所有图像模型"""
+        models = self.image_model_manager.list_models(include_disabled)
+        return {
+            "success": True,
+            "count": len(models),
+            "models": models
+        }
+
+    async def _select_image_model(
+        self,
+        strategy: Optional[str] = None,
+        preferred_model: Optional[str] = None,
+        aspect_ratio: str = "3:4"
+    ) -> Dict[str, Any]:
+        """选择图像模型"""
+        if strategy:
+            strategy_enum = ModelStrategy(strategy)
+        else:
+            strategy_enum = None
+
+        model = self.image_model_manager.select_model(strategy_enum, preferred_model, aspect_ratio)
+
+        if model:
+            return {
+                "success": True,
+                "model": model,
+                "cost_estimate": self.image_model_manager.estimate_cost(
+                    model.get("selected_submodel", "")
+                )
+            }
+        else:
+            return {
+                "success": False,
+                "error": "No suitable model found"
+            }
+
+    async def _get_model_config(self, model_id: str) -> Dict[str, Any]:
+        """获取模型配置"""
+        model = self.image_model_manager.get_model(model_id)
+
+        if model:
+            return {
+                "success": True,
+                "model_id": model_id,
+                "config": model
+            }
+        else:
+            return {
+                "success": False,
+                "error": f"Model {model_id} not found"
+            }
+
+    async def _enable_image_model(self, model_id: str) -> Dict[str, Any]:
+        """启用图像模型"""
+        success = self.image_model_manager.enable_model(model_id)
+
+        if success:
+            return {
+                "success": True,
+                "message": f"Model {model_id} enabled successfully"
+            }
+        else:
+            return {
+                "success": False,
+                "error": f"Failed to enable model {model_id}"
+            }
+
+    async def _disable_image_model(self, model_id: str) -> Dict[str, Any]:
+        """禁用图像模型"""
+        success = self.image_model_manager.disable_model(model_id)
+
+        if success:
+            return {
+                "success": True,
+                "message": f"Model {model_id} disabled successfully"
+            }
+        else:
+            return {
+                "success": False,
+                "error": f"Failed to disable model {model_id}"
+            }
+
+    async def _generate_image_with_model(
+        self,
+        prompt: str,
+        model_id: Optional[str] = None,
+        aspect_ratio: str = "3:4",
+        strategy: str = "cost_first"
+    ) -> Dict[str, Any]:
+        """使用指定模型生成图像"""
+        # 选择模型
+        if model_id:
+            model = self.image_model_manager.get_model(model_id)
+            if not model or not model.get("enabled", False):
+                return {
+                    "success": False,
+                    "error": f"Model {model_id} not available or disabled"
+                }
+            selected_model = self.image_model_manager._select_submodel(model, aspect_ratio)
+        else:
+            strategy_enum = ModelStrategy(strategy)
+            selected_model = self.image_model_manager.select_model(strategy_enum, None, aspect_ratio)
+
+        if not selected_model:
+            return {
+                "success": False,
+                "error": "No suitable model found"
+            }
+
+        # 生成模型参数
+        params = self.image_model_manager.get_model_params(selected_model, prompt, aspect_ratio)
+
+        # 这里应该调用实际的图像生成MCP
+        # 目前返回模拟结果
+        logger.info(f"Generating image with model: {selected_model.get('name')}")
+        logger.info(f"Prompt: {prompt}")
+
+        # TODO: 实际调用对应的MCP服务器
+        # provider = selected_model.get("provider")
+        # result = await self._call_mcp(provider, "generate_image", params)
+
+        return {
+            "success": True,
+            "model_used": selected_model.get("name"),
+            "submodel": selected_model.get("selected_submodel"),
+            "params": params,
+            "image_url": f"https://example.com/generated/{prompt[:20]}.png",  # 模拟URL
+            "cost_estimate": self.image_model_manager.estimate_cost(
+                selected_model.get("selected_submodel", ""),
+                selected_model.get("selected_submodel")
+            )
+        }
 
     async def run(self):
         """启动服务器"""
