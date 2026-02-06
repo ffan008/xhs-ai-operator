@@ -891,7 +891,6 @@ chore: 构建/工具链更新
 ## 联系方式
 
 - GitHub Issues: [提交问题](https://github.com/your-repo/issues)
-- Email: your-email@example.com
 
 ---
 
