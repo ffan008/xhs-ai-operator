@@ -1,0 +1,38 @@
+{
+  "accounts": [
+    {
+      "account_id": "primary_account",
+      "account_name": "主账号",
+      "enabled": true,
+      "login_type": "qrcode",
+      "cookies": "",
+      "last_login": null,
+      "status": "logged_out",
+      "limits": {
+        "max_posts_per_hour": 10,
+        "max_posts_per_day": 50,
+        "min_interval_minutes": 30
+      },
+      "statistics": {
+        "total_posts": 0,
+        "followers": 0,
+        "following": 0
+      }
+    }
+  ],
+  "settings": {
+    "default_account": "primary_account",
+    "auto_rotate": false,
+    "risk_control": {
+      "enabled": true,
+      "max_concurrent_posts": 3,
+      "smart_interval": true
+    },
+    "logging": {
+      "enabled": true,
+      "level": "INFO",
+      "log_file": "xhs_operator.log"
+    }
+  },
+  "note": "请勿将此文件提交到版本控制系统，包含敏感信息"
+}

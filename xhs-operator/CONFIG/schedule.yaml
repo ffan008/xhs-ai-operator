@@ -1,0 +1,275 @@
+# 小红书 AI 运营系统 - 定时任务配置
+
+# 全局设置
+settings:
+  timezone: "Asia/Shanghai"
+  max_concurrent_jobs: 5
+  retry_on_failure: true
+  retry_attempts: 3
+  retry_delay_minutes: 5
+  logging_enabled: true
+  log_level: "INFO"
+
+# 内容池配置
+content_pool:
+  enabled: true
+  pool_size: 10  # 预生成内容数量
+  refresh_interval_hours: 24
+  auto_regenerate: true
+
+# 预设定时任务
+scheduled_jobs:
+  # 每日早安问候
+  - job_id: "daily_morning"
+    job_name: "每日早安"
+    enabled: true
+    cron_expression: "0 7 * * *"  # 每天早上7点
+    workflow: "publish"
+    template: "morning_post"
+    params:
+      style: "healing"
+      auto_generate_image: true
+    description: "每天早上7点发布早安问候"
+
+  # 每日干货分享
+  - job_id: "daily_knowledge"
+    job_name: "每日干货"
+    enabled: true
+    cron_expression: "0 12 * * *"  # 每天中午12点
+    workflow: "publish"
+    template: "knowledge_share"
+    params:
+      style: "professional"
+      auto_generate_image: true
+      topics: ["时间管理", "学习方法", "职场技能", "生活技巧"]
+    description: "每天中午12点发布干货内容"
+
+  # 每日晚安内容
+  - job_id: "daily_night"
+    job_name: "每日晚安"
+    enabled: true
+    cron_expression: "0 22 * * *"  # 每天晚上10点
+    workflow: "publish"
+    template: "emotional_healing"
+    params:
+      style: "healing"
+      auto_generate_image: true
+    description: "每天晚上10点发布治愈系内容"
+
+  # 工作日穿搭分享
+  - job_id: "weekly_ootd"
+    job_name: "穿搭分享"
+    enabled: true
+    cron_expression: "0 8 * * 1-5"  # 工作日早上8点
+    workflow: "publish"
+    template: "ootd"
+    params:
+      style: "lively"
+      auto_generate_image: true
+      styles: ["甜美可爱", "休闲舒适", "简约高级", "职场通勤"]
+    description: "工作日早上8点发布穿搭内容"
+
+  # 每周好物推荐
+  - job_id: "weekly_recommendation"
+    job_name: "好物推荐"
+    enabled: true
+    cron_expression: "0 19 * * 5"  # 每周五晚上7点
+    workflow: "publish"
+    template: "product_review"
+    params:
+      style: "lively"
+      auto_generate_image: true
+      categories: ["家居好物", "美妆护肤", "数码配件", "生活用品"]
+    description: "每周五晚上7点发布好物推荐"
+
+  # 每周数据分析
+  - job_id: "weekly_analysis"
+    job_name: "周数据分析"
+    enabled: true
+    cron_expression: "0 9 * * 1"  # 每周一早上9点
+    workflow: "analyze"
+    params:
+      time_range: "last_7_days"
+      generate_report: true
+      save_to_file: true
+    description: "每周一早上9点生成数据分析报告"
+
+  # 每月数据总结
+  - job_id: "monthly_analysis"
+    job_name: "月数据总结"
+    enabled: true
+    cron_expression: "0 9 1 * *"  # 每月1号早上9点
+    workflow: "analyze"
+    params:
+      time_range: "last_month"
+      generate_report: true
+      save_to_file: true
+      send_notification: true
+    description: "每月1号早上9点生成月度数据报告"
+
+# 风控配置
+risk_control:
+  enabled: true
+  rules:
+    - name: "发布间隔限制"
+      type: "interval"
+      min_interval_minutes: 30
+      description: "两次发布之间最少间隔30分钟"
+
+    - name: "每日发布上限"
+      type: "daily_limit"
+      max_posts_per_day: 50
+      description: "每天最多发布50篇笔记"
+
+    - name: "每小时发布上限"
+      type: "hourly_limit"
+      max_posts_per_hour: 10
+      description: "每小时最多发布10篇笔记"
+
+    - name: "敏感时间避开"
+      type: "blackout_hours"
+      blackout_periods:
+        - start: "00:00"
+          end: "06:00"
+          reason: "深夜时段避免发布"
+      description: "避开深夜时段发布"
+
+# 内容质量控制
+quality_control:
+  enabled: true
+  checks:
+    - name: "标题长度检查"
+      type: "title_length"
+      min_length: 5
+      max_length: 20
+      action: "regenerate"
+
+    - name: "正文长度检查"
+      type: "body_length"
+      min_length: 100
+      max_length: 1000
+      action: "regenerate"
+
+    - name: "敏感词过滤"
+      type: "sensitive_words"
+      word_list: "sensitive_words.txt"
+      action: "filter"
+
+    - name: "图片质量检查"
+      type: "image_quality"
+      min_width: 1080
+      min_height: 1440
+      action: "regenerate"
+
+    - name: "标签数量检查"
+      type: "tag_count"
+      min_tags: 3
+      max_tags: 5
+      action: "adjust"
+
+# 多账号配置
+multi_account:
+  enabled: false
+  rotation_strategy: "round_robin"  # round_robin, random, weighted
+  accounts:
+    - account_id: "account_1"
+      weight: 1
+      max_posts_per_day: 20
+
+    - account_id: "account_2"
+      weight: 1
+      max_posts_per_day: 15
+
+# 通知配置
+notifications:
+  enabled: true
+  channels:
+    - type: "log"
+      enabled: true
+
+    - type: "console"
+      enabled: true
+
+    - type: "webhook"  # 可选：webhook通知
+      enabled: false
+      url: "https://your-webhook-url.com"
+      events:
+        - "publish_success"
+        - "publish_failure"
+        - "analysis_complete"
+
+# 批量任务配置
+batch_tasks:
+  enabled: true
+  max_concurrent: 3  # 并发生成任务数
+  publish_interval_minutes: 30  # 发布间隔
+  quality_check_enabled: true
+  deduplication_enabled: true
+  deduplication_threshold: 0.85  # 相似度阈值
+
+# 热点追踪配置（可选）
+trending:
+  enabled: false
+  check_interval_hours: 6
+  sources:
+    - name: "xiaohongshu_hot"
+      enabled: true
+    - name: "weibo_hot"
+      enabled: false
+  auto_create_content: false
+  notify_only: true
+
+# 存储配置
+storage:
+  type: "local"  # local, s3, oss
+  local:
+    base_path: "./data"
+  s3:
+    enabled: false
+    bucket: "your-bucket"
+    region: "us-east-1"
+
+# 备份配置
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # 每天凌晨2点备份
+  retention_days: 30
+  backup_types:
+    - "accounts"
+    - "templates"
+    - "schedules"
+    - "content_pool"
+    - "logs"
+
+# 性能配置
+performance:
+  image_generation_timeout: 300  # 秒
+  publish_timeout: 60  # 秒
+  max_retry_attempts: 3
+  cache_enabled: true
+  cache_ttl_hours: 24
+
+# 开发模式配置
+development:
+  enabled: false
+  dry_run: false  # 设为true时不实际发布
+  verbose_logging: true
+  skip_image_generation: false
+  test_accounts_only: false
+
+# Cron 表达式说明
+# ┌───────────── 分钟 (0 - 59)
+# │ ┌───────────── 小时 (0 - 23)
+# │ │ ┌───────────── 日期 (1 - 31)
+# │ │ │ ┌───────────── 月份 (1 - 12)
+# │ │ │ │ ┌───────────── 星期 (0 - 6，0 = 周日)
+# │ │ │ │ │
+# * * * * *
+
+# 示例：
+# "0 7 * * *"      - 每天早上7点
+# "0 */6 * * *"    - 每6小时
+# "0 9 * * 1-5"    - 工作日早上9点
+# "0 0 * * 0"      - 每周日0点
+# "*/30 * * * *"   - 每30分钟
+# "0 9 1 * *"      - 每月1号早上9点

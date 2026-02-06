@@ -1,0 +1,279 @@
+{
+  "templates": [
+    {
+      "template_id": "morning_post",
+      "template_name": "早安问候",
+      "category": "daily",
+      "style": "healing",
+      "enabled": true,
+      "title_template": "早安{emoji} {greeting}",
+      "body_template": "早上好呀☀️\n\n{message}\n\n{quote}\n\n✨ 今天也要元气满满哦！\n\n{question}",
+      "tags": ["#早安", "#早安问候", "#正能量", "#早安语录"],
+      "variables": {
+        "greeting": ["新的一天开始了", "美好的一天", "早安啦"],
+        "message": [
+          "愿你的今天充满阳光和欢笑",
+          "每一个清晨都是新的开始",
+          "相信自己，你很棒",
+          "保持热爱，奔赴山海"
+        ],
+        "quote": [
+          "「早起的鸟儿有虫吃」",
+          "「一天之计在于晨」",
+          "「每一个不曾起舞的日子，都是对生命的辜负」"
+        ],
+        "question": [
+          "今天有什么计划呢？评论区告诉我~",
+          "你那里天气怎么样？",
+          "分享一句你喜欢的早安语录吧~"
+        ]
+      },
+      "image_prompts": [
+        "soft morning sunlight through window, cozy bedroom, healing aesthetic",
+        "coffee cup on bedside table, morning light, minimalist photography",
+        "sunrise view from window, peaceful and serene atmosphere"
+      ]
+    },
+    {
+      "template_id": "knowledge_share",
+      "template_name": "干货分享",
+      "category": "educational",
+      "style": "professional",
+      "enabled": true,
+      "title_template": "{topic}指南{emoji} | {number}个技巧",
+      "body_template": "整理了{number}个最实用的{topic}技巧，建议收藏！\n\n{content}\n\n【配套资源】\n{resources}\n\n💡 觉得有用的话，点赞收藏支持一下~",
+      "tags": ["#干货分享", "#知识科普", "#实用技巧", "#教程"],
+      "variables": {
+        "number": [3, 5, 7, 10],
+        "topics": [
+          "时间管理",
+          "学习方法",
+          "职场技能",
+          "生活技巧",
+          "软件工具"
+        ]
+      },
+      "structure": {
+        "sections": [
+          {
+            "title": "基础设置",
+            "items": "配置相关内容"
+          },
+          {
+            "title": "进阶技巧",
+            "items": "高级使用方法"
+          },
+          {
+            "title": "常见问题",
+            "items": "FAQ和解决方案"
+          }
+        ]
+      },
+      "image_prompts": [
+        "clean infographic design, flat illustration, pastel colors, educational",
+        "minimalist notes layout, bullet journal style, organized information"
+      ]
+    },
+    {
+      "template_id": "product_review",
+      "template_name": "好物推荐",
+      "category": "recommendation",
+      "style": "lively",
+      "enabled": true,
+      "title_template": "挖到宝了{emoji}！这{number}样{category}提升幸福感💯",
+      "body_template": "使用{duration}，这{number}样东西是我用过最不后悔的！\n\n{products}\n\n💰 总花费：{total_price}元\n💯 幸福感提升：不止一倍！\n\n{call_to_action}",
+      "tags": ["#好物推荐", "#平价好物", "#提升幸福感", "#种草"],
+      "variables": {
+        "number": [3, 5, 7, 10],
+        "duration": ["1个月", "3个月", "半年", "1年"],
+        "category": ["家居好物", "美妆护肤", "数码配件", "生活用品"]
+      },
+      "product_template": "{number}. {product_name}（{price}元）\n{description}\n✅ {highlight_1}\n✅ {highlight_2}\n✅ {highlight_3}\n",
+      "image_prompts": [
+        "product photography, lifestyle setting, natural lighting, aesthetic",
+        "flat lay of products, clean background, commercial photography"
+      ]
+    },
+    {
+      "template_id": "ootd",
+      "template_name": "穿搭分享",
+      "category": "fashion",
+      "style": "lively",
+      "enabled": true,
+      "title_template": "春季穿搭{emoji} | {style}风格全套搭配",
+      "body_template": "今天的分享是{style}风格穿搭~\n\n👔 上装：{top}\n👖 下装：{bottom}\n👟 鞋子：{shoes}\n💼 配饰：{accessories}\n\n💡 穿搭Tips：\n{tips}\n\n{tags_line}\n\n{question}",
+      "tags": ["#穿搭分享", "#OOTD", "#春季穿搭", "#日常穿搭"],
+      "variables": {
+        "style": [
+          "甜美可爱",
+          "休闲舒适",
+          "简约高级",
+          "复古文艺",
+          "职场通勤"
+        ]
+      },
+      "image_prompts": [
+        "street style fashion photography, urban background, natural daylight",
+        "fashion flat lay, outfit components arranged, clean background",
+        "full body outfit shot, model posing, trendy aesthetic"
+      ]
+    },
+    {
+      "template_id": "food_recommendation",
+      "template_name": "美食推荐",
+      "category": "food",
+      "style": "lively",
+      "enabled": true,
+      "title_template": "姐妹们{emoji}！这家{restaurant_type}我挖到了🔥",
+      "body_template": "家人们！今天给你们按头安利一家我私藏的{restaurant_type}！\n\n📍 位置：{location}\n\n{menu_items}\n\n💰 人均：{price}元\n🅿️ 停车：{parking}\n\n{overall_rating}\n\n{call_to_action}",
+      "tags": ["#美食探店", "#宝藏店铺", "#平价美食", "#吃货攻略"],
+      "variables": {
+        "restaurant_type": [
+          "火锅店",
+          "奶茶店",
+          "咖啡馆",
+          "甜品店",
+          "小酒馆"
+        ]
+      },
+      "menu_item_template": "🍴 {dish_name}\n{description}",
+      "image_prompts": [
+        "professional food photography, restaurant quality, appetizing",
+        "cozy cafe interior, lifestyle photography, warm lighting"
+      ]
+    },
+    {
+      "template_id": "travel_guide",
+      "template_name": "旅行攻略",
+      "category": "travel",
+      "style": "professional",
+      "enabled": true,
+      "title_template": "{destination}旅行攻略{emoji} | {days}天{cost}预算玩法",
+      "body_template": "刚从{destination}回来，整理了一份超详细攻略！\n\n📍 目的地：{destination}\n⏰ 建议天数：{days}天\n💰 预算：{cost}元\n\n📅 行程安排\n{itinerary}\n\n🏨 住宿推荐\n{accommodation}\n\n🍜 美食推荐\n{food}\n\n💡 贴心Tips\n{tips}\n\n{call_to_action}",
+      "tags": ["#旅行攻略", "#周末去哪儿", "#旅游", "#旅行推荐"],
+      "variables": {
+        "destination": [
+          "杭州",
+          "成都",
+          "西安",
+          "青岛",
+          "大理"
+        ],
+        "days": [2, 3, 4, 5],
+        "cost": ["500-1000", "1000-2000", "2000-3000"]
+      },
+      "image_prompts": [
+        "travel landscape photography, scenic view, golden hour lighting",
+        "travel lifestyle photo, candid shot, happy and relaxed atmosphere"
+      ]
+    },
+    {
+      "template_id": "beauty_tutorial",
+      "template_name": "美妆教程",
+      "category": "beauty",
+      "style": "professional",
+      "enabled": true,
+      "title_template": "{makeup_style}妆容教程{emoji} | {difficulty}难度",
+      "body_template": "今天分享一个{makeup_style}妆容教程，{difficulty}难度，新手友好！\n\n🎨 妆容特点\n{features}\n\n📝 步骤教程\n{steps}\n\n💄 产品清单\n{products}\n\n💡 小Tips\n{tips}\n\n{call_to_action}",
+      "tags": ["#美妆教程", "#妆容分享", "#化妆技巧", "#新手化妆"],
+      "variables": {
+        "makeup_style": [
+          "日常裸妆",
+          "约会心机妆",
+          "职场通勤妆",
+          "夏季清透妆",
+          "冬季温柔妆"
+        ],
+        "difficulty": ["新手友好", "中等难度", "进阶"]
+      },
+      "image_prompts": [
+        "beauty close-up shot, professional makeup, soft lighting",
+        "makeup products flat lay, aesthetic arrangement, clean background"
+      ]
+    },
+    {
+      "template_id": "emotional_healing",
+      "template_name": "治愈系文案",
+      "category": "emotional",
+      "style": "healing",
+      "enabled": true,
+      "title_template": "{title}",
+      "body_template": "{opening}\n\n{main_content}\n\n{closing}\n\n✨ {blessing}",
+      "tags": ["#治愈系", "#情感共鸣", "#自我成长", "#夜读"],
+      "variables": {
+        "title": [
+          "与自己和解，是这一生最重要的功课",
+          "允许自己偶尔脆弱",
+          "慢慢来，比较快",
+          "你不必成为任何人",
+          "被温柔以待的瞬间"
+        ]
+      },
+      "image_prompts": [
+        "soft dreamy scene, pastel colors, healing aesthetic",
+        "cozy atmosphere, warm lighting, peaceful and serene",
+        "abstract art, gradient colors, meditative quality"
+      ]
+    },
+    {
+      "template_id": "home_decor",
+      "template_name": "家居分享",
+      "category": "home",
+      "style": "minimalist",
+      "enabled": true,
+      "title_template": "{room_type}改造{emoji} | {style}风格装修灵感",
+      "body_template": "分享我的{room_type}布置，{style}风格~\n\n{description}\n\n🛋️ 家具清单\n{furniture}\n\n🎨 软装搭配\n{decor}\n\n💡 改造Tips\n{tips}\n\n{call_to_action}",
+      "tags": ["#家居改造", "#装修灵感", "#软装搭配", "#家居美学"],
+      "variables": {
+        "room_type": [
+          "客厅",
+          "卧室",
+          "书房",
+          "阳台",
+          "厨房"
+        ],
+        "style": [
+          "极简主义",
+          "北欧风",
+          "日式原木",
+          "现代简约",
+          "法式复古"
+        ]
+      },
+      "image_prompts": [
+        "interior design photography, natural light, bright and airy",
+        "home decor product shot, styled setting, lifestyle photography"
+      ]
+    },
+    {
+      "template_id": "fitness_workout",
+      "template_name": "健身运动",
+      "category": "fitness",
+      "style": "professional",
+      "enabled": true,
+      "title_template": "{workout_type}训练计划{emoji} | {duration}分钟居家练",
+      "body_template": "分享一份{workout_type}训练计划，{duration}分钟，在家就能练！\n\n📋 训练内容\n{exercises}\n\n⏱️ 训练安排\n{schedule}\n\n💡 注意事项\n{tips}\n\n坚持{duration_days}天，你会看到变化！\n\n{call_to_action}",
+      "tags": ["#居家运动", "#健身", "#训练计划", "#减脂塑形"],
+      "variables": {
+        "workout_type": [
+          "核心塑形",
+          "全身燃脂",
+          "臀部训练",
+          "手臂塑形",
+          "拉伸放松"
+        ],
+        "duration": [10, 15, 20, 30],
+        "duration_days": [7, 14, 21, 30]
+      },
+      "image_prompts": [
+        "fitness lifestyle photography, workout scene, motivating atmosphere",
+        "exercise illustration, flat design, instructional style"
+      ]
+    }
+  ],
+  "settings": {
+    "auto_select": "random",
+    "include_image_prompt": true,
+    "validate_before_use": true
+  }
+}
