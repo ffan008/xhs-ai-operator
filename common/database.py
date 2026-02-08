@@ -360,7 +360,8 @@ class DatabaseManager:
         table: str,
         where: Optional[Dict[str, Any]] = None,
         order_by: Optional[str] = None,
-        limit: Optional[int] = None
+        limit: Optional[int] = None,
+        offset: Optional[int] = None
     ) -> List[sqlite3.Row]:
         """
         查询数据
@@ -370,6 +371,7 @@ class DatabaseManager:
             where: WHERE 条件
             order_by: 排序字段
             limit: 限制行数
+            offset: 偏移量
 
         Returns:
             行数据列表
@@ -387,6 +389,8 @@ class DatabaseManager:
 
         if limit:
             sql += f" LIMIT {limit}"
+            if offset is not None:
+                sql += f" OFFSET {offset}"
 
         return self.fetch_all(sql, params)
 
@@ -533,7 +537,8 @@ class AsyncDatabaseWrapper:
         table: str,
         where: Optional[Dict[str, Any]] = None,
         order_by: Optional[str] = None,
-        limit: Optional[int] = None
+        limit: Optional[int] = None,
+        offset: Optional[int] = None
     ) -> List[Dict[str, Any]]:
         """异步查询数据"""
         executor = await self._get_executor()
@@ -544,7 +549,8 @@ class AsyncDatabaseWrapper:
             table,
             where,
             order_by,
-            limit
+            limit,
+            offset
         )
         return [dict(row) for row in rows]
 
