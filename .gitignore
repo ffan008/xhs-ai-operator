@@ -48,8 +48,24 @@ yarn-error.log*
 # Sensitive Data
 CONFIG/accounts.json
 .env
+.env.*
 *.key
 secrets/
+*.pem
+*.cert
+*.crt
+
+# Security scan results
+security-scan.json
+security-report.txt
+
+# Backup files
+backup_*/
+*.bak
+*.backup
+
+# Encrypted config
+*.encrypted
 
 # Docker
 docker-compose.override.yml
